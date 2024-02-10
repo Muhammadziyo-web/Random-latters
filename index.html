@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Letter Generator</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+  <body>
+    <h1>Randomize <span>Letter</span></h1>
+    <button onclick="generateLetter()" class="generateBtn">
+      <span id="output"></span>
+      <span class="material-symbols-outlined"> refresh </span>
+    </button>
+
+    <div id="history-wrapper">
+      <div id="history"></div>
+      <button onclick="clearHistory()" class="clearHistoryBtn">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+
+    <script>
+   
+
+      let history = [];
+
+      function generateLetter() {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let randomIndex = Math.floor(Math.random() * letters.length);
+        let randomLetter = letters[randomIndex];
+
+        let noLettersLeft = history.length >= letters.length;
+        // Check if the letter is already returned
+        if (noLettersLeft) {
+          if (
+            window.confirm("No letters left.\nDo you want to clear history?")
+          ) {
+            clearHistory();
+          }
+          return;
+        }
+        while (history.includes(randomLetter)) {
+          randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetter = letters[randomIndex];
+        }
+
+        document.querySelector(".generateBtn").classList.add("clicked");
+        // Reset the 'clicked' class after the animation ends
+        setTimeout(() => {
+          document.querySelector(".generateBtn").classList.remove("clicked");
+        }, 1000);
+
+        history.push(randomLetter);
+        updateOutput(randomLetter);
+        updateHistory();
+      }
+
+      function updateOutput(letter) {
+        document.getElementById("output").textContent = letter;
+      }
+
+      function updateHistory() {
+        document.getElementById("history").textContent = history.join(", ");
+      }
+
+      function clearHistory() {
+        history = [];
+        updateHistory();
+      }
+    </script>
+  </body>
+</html>
